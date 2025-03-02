@@ -43,13 +43,14 @@ jobs:
         uses: actions/download-artifact@v4
         with: 
           name: built-jar
-          path: target/
+          path: dummy/target/
   
       - name: Extract Version from pom.xml
         id: get_version
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+        working-directory: dummy
   
       - name: Rename JAR with Version & Timestamp
         run: |
