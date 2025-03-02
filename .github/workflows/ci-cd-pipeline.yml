@@ -56,7 +56,11 @@ jobs:
       - name: Rename JAR with Version & Timestamp
         run: |
           mkdir -p build
-          JAR_NAME=$(ls target/*.jar | head -n 1)
+          JAR_NAME=$(ls dummy/target/*.jar 2>/dev/null | head -n 1)
+          if [[ -z "$JAR_NAME" ]]; then
+            echo "Error: No JAR file found in dummy/target/. Exiting..."
+            exit 1
+          fi
           NEW_JAR_NAME="pool-route-monitor-${{ env.VERSION }}-$(date +'%Y%m%d%H%M%S').jar"
           mv "$JAR_NAME" "build/$NEW_JAR_NAME"
           echo "FINAL_JAR=build/$NEW_JAR_NAME" >> $GITHUB_ENV
